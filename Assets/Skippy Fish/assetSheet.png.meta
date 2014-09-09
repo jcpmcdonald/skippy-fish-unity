@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: 7f5ab2d71f50f484b955911a016fb77a
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: assetSheet
+    21300002: Shark 0
+    21300004: Shark 1
+    21300006: Skipper 0
+    21300008: Skipper 1
+    21300010: Skipper 2
+    21300012: Cloud
+    21300014: Skipper 3
+    21300016: Skipper 4
+    21300018: Skipper 5
+    21300020: Fail
+    21300022: Splash 0
+    21300024: Splash 1
+    21300026: Splash 2
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Shark 0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 180
+        width: 301
+        height: 129
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Shark 1
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 180
+        width: 301
+        height: 129
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Skipper 0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 145
+        width: 102
+        height: 29
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Skipper 1
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 144
+        width: 102
+        height: 35
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Skipper 2
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 143
+        width: 102
+        height: 32
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Cloud
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 46
+        width: 199
+        height: 133
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Skipper 3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 106
+        width: 102
+        height: 30
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Skipper 4
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 106
+        width: 101
+        height: 35
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Skipper 5
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 105
+        width: 102
+        height: 34
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Fail
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 305
+        height: 104
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Splash 0
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 33
+        width: 45
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Splash 1
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 33
+        width: 53
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Splash 2
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 34
+        width: 57
+        height: 9
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
