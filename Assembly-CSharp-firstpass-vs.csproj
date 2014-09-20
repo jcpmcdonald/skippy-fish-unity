@@ -91,6 +91,7 @@
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Lightmap Shaders (Legacy)\Mobile Lightmap Reflective.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Particles Additive Culled.shader" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\drawable\common_signin_btn_text_light.xml" />
+     <None Include="Assets\glide\license.txt" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values\wallet_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-am\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-vi\common_strings.xml" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Glide;
 using UnityEngine;
 using System.Collections;
 
@@ -20,16 +21,27 @@ public class Game : MonoBehaviour
 	public Transform SkipperTransform;
 	public Skipper skipper;
 
+	private Tweener Tweener = new Tweener();
+
+	private TweenTransformWrap SkipperTrasnsformWrap;
+
 	// Use this for initialization
-	void Start () {
-		SkipperTransform.position = new Vector3(camera.rect.xMin, 0, 0);
+	private void Start()
+	{
+		SkipperTrasnsformWrap = new TweenTransformWrap(SkipperTransform);
+		//SkipperTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0.5f)).x, 0, 0);
+		Tweener.Tween(SkipperTrasnsformWrap, new { X = 0.5f }, 2)
+			.OnComplete(() => Tweener.Tween(SkipperTrasnsformWrap, new { X = 0f }, 1));
 	}
-	
+
+
 	// Update is called once per frame
 	void Update ()
 	{
 
 		if (Input.GetKeyDown(KeyCode.Escape)) { Application.Quit(); }
+
+		Tweener.Update(Time.deltaTime);
 
 		int i = 0;
 		bool tap = Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0);
