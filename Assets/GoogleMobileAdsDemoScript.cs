@@ -131,15 +131,15 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
 
 
 		//AdRequest.Builder.addTestDevice("6B2ED5D542B78AD293024BB4AE192C7E")
-        return new AdRequest.Builder()
-                .AddTestDevice(AdRequest.TestDeviceSimulator)
-				.AddTestDevice("6B2ED5D542B78AD293024BB4AE192C7E")
-                .AddKeyword("game")
-                .SetGender(Gender.Male)
-                .SetBirthday(new DateTime(1985, 1, 1))
-                .TagForChildDirectedTreatment(false)
-                .AddExtra("color_bg", "9B30FF")
-                .Build();
+	    return new AdRequest.Builder()
+			    .AddTestDevice(AdRequest.TestDeviceSimulator)
+			    .AddTestDevice("6B2ED5D542B78AD293024BB4AE192C7E")
+			    .AddKeyword("game")
+			    .SetGender(Gender.Male)
+			    .SetBirthday(new DateTime(1985, 1, 1))
+			    .TagForChildDirectedTreatment(false)
+			    .AddExtra("color_bg", "9B30FF")
+			    .Build();
 
     }
 
