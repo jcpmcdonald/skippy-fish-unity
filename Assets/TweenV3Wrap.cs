@@ -35,4 +35,10 @@ public class TweenTransformWrap
 		get { return v3.position.z; }
 		set { v3.position = new Vector3(v3.position.x, v3.position.y, value); }
 	}
+
+	public float EulerAnglesZ
+	{
+		get { return v3.eulerAngles.z; }
+		set { v3.eulerAngles = new Vector3(v3.eulerAngles.x, v3.eulerAngles.y, value); }
+	}
 }
