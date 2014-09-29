@@ -5,8 +5,6 @@ Project("{C73561B2-299A-497F-B3F9-E3919A5937E8}") = "Skippy Fish", "Assembly-CSh
 EndProject
 Project("{C73561B2-299A-497F-B3F9-E3919A5937E8}") = "Skippy Fish", "Assembly-CSharp.csproj", "{D9A98F66-BB24-E46F-9B78-7BAC975C596F}"
 EndProject
-Project("{C73561B2-299A-497F-B3F9-E3919A5937E8}") = "Skippy Fish", "Assembly-UnityScript.unityproj", "{AB5A9D3C-E989-0E11-B5B9-E7F9C8B85DDA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,15 +19,11 @@ Global
 		{D9A98F66-BB24-E46F-9B78-7BAC975C596F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9A98F66-BB24-E46F-9B78-7BAC975C596F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9A98F66-BB24-E46F-9B78-7BAC975C596F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB5A9D3C-E989-0E11-B5B9-E7F9C8B85DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB5A9D3C-E989-0E11-B5B9-E7F9C8B85DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB5A9D3C-E989-0E11-B5B9-E7F9C8B85DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB5A9D3C-E989-0E11-B5B9-E7F9C8B85DDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																												GlobalSection(MonoDevelopProperties) = preSolution
+																																		GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

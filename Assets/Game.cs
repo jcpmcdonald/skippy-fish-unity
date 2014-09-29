@@ -17,8 +17,9 @@ public class Game : MonoBehaviour
 	}
 
 	private State state = State.mainMenu;
-	public Transform TitleTextTransform;
-	public Transform TextClickAnywhereTransform;
+	public RectTransform TitleTextTransform;
+	public RectTransform TextClickAnywhereTransform;
+	public Canvas UICanvas;
 
 	public Animator SkipperAnimator;
 	public Transform SkipperTransform;
@@ -91,8 +92,8 @@ public class Game : MonoBehaviour
 				{
 					state = State.introScene;
 
-					Tweener.Tween(TextTitleTrasnsformWrap, new{ X = 2 }, 0.9f).Ease(Ease.QuadInOut);
-					Tweener.Tween(TextClickAnywhereTransformWrap, new{ X = 2 }, 0.6f).Ease(Ease.QuadInOut);
+					Tweener.Tween(TextTitleTrasnsformWrap, new{ X = TitleTextTransform.rect.width + UICanvas.pixelRect.width }, 0.9f).Ease(Ease.QuadInOut);
+					Tweener.Tween(TextClickAnywhereTransformWrap, new { X = TextClickAnywhereTransform.rect.width + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut);
 					//TitleTextAnimator.SetTrigger("TextExit");
 					//SkipperAnimator.SetTrigger("StartIntro");
 
@@ -196,8 +197,8 @@ public class Game : MonoBehaviour
 			//$("#altitudeRecord").hide();
 		}
 	
-		if(skipper.airTime > maxAirTime){
-			maxAirTime = skipper.airTime;
+		if(skipper.airTime.TotalSeconds > maxAirTime){
+			maxAirTime = (float)skipper.airTime.TotalSeconds;
 			PlayerPrefs.SetFloat("maxAirTime", maxAirTime);
 			//Crafty.storage('maxAirTime', Game.maxAirTime);
 			//$("#newAirTimeRecord").show();
@@ -230,14 +231,14 @@ public class Game : MonoBehaviour
 		       .OnComplete(() =>
 		                   {
 			                   Tweener.Tween(CameraTrasnsformWrap, new{ Y = 1 }, 1f).Ease(Ease.CubeInOut);
-			                   TextTitleTrasnsformWrap.X = -1.5f;
-							   TextClickAnywhereTransformWrap.X = -1.5f;
-							   Tweener.Tween(TextTitleTrasnsformWrap, new { X = 0.5 }, 0.9f).Ease(Ease.QuadOut);
-							   Tweener.Tween(TextClickAnywhereTransformWrap, new { X = 0.5 }, 0.6f).Ease(Ease.QuadOut).OnComplete(() => state = State.mainMenu);
+			                   TextTitleTrasnsformWrap.X = -(TitleTextTransform.rect.width + UICanvas.pixelRect.width);
+			                   TextClickAnywhereTransformWrap.X = -(TextClickAnywhereTransform.rect.width + UICanvas.pixelRect.width);
+			                   Tweener.Tween(TextTitleTrasnsformWrap, new{ X = UICanvas.pixelRect.width / 2 }, 0.9f).Ease(Ease.QuadOut);
+			                   Tweener.Tween(TextClickAnywhereTransformWrap, new{ X = UICanvas.pixelRect.width / 2 }, 0.6f).Ease(Ease.QuadOut).OnComplete(() => state = State.mainMenu);
 		                   });
 
 
-		
+
 	}
 
 

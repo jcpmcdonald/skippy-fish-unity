@@ -9,3 +9,4 @@ E:\Cell\Unity\Skippy Fish\Temp\bin\Debug\ICSharpCode.NRefactory.dll
 E:\Cell\Unity\Skippy Fish\obj\Debug\Assembly-CSharp-firstpass-vs.csprojResolveAssemblyReference.cache
 E:\Cell\Unity\Skippy Fish\obj\Debug\Assembly-CSharp-firstpass.dll
 E:\Cell\Unity\Skippy Fish\obj\Debug\Assembly-CSharp-firstpass.pdb
+E:\Cell\Unity\Skippy Fish\Temp\bin\Debug\UnityEngine.UI.dll

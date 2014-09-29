@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net.Mime;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Skipper : MonoBehaviour
 {
@@ -12,13 +14,16 @@ public class Skipper : MonoBehaviour
 	public int skipCount;
 	public float skipDistance;
 	public float maxHeight;
-	public float airTime;
+	//public float airTime;
+	public TimeSpan airTime;
 
+	public Text seconds;
+	public Text millis;
 	public GUIText textSkipQuality;
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+	{
 	}
 	
 	// Update is called once per frame
@@ -32,15 +37,9 @@ public class Skipper : MonoBehaviour
 
 			transform.eulerAngles = new Vector3(0, 0, Math.Min(velocity, 3) / 3 * 25);
 
-			//Animator animator = GetComponent<Animator>();
-			//if (transform.position.y > 0)
-			//{
-			//	animator.SetTrigger("StartAirborn");
-			//}
-			//else
-			//{
-			//	animator.SetTrigger("StartScared");
-			//}
+			airTime += TimeSpan.FromSeconds(Time.deltaTime);
+			seconds.text = ((int)airTime.TotalSeconds).ToString();
+			millis.text = (airTime.Milliseconds / 10).ToString("00");
 		}
 	}
 
@@ -51,6 +50,8 @@ public class Skipper : MonoBehaviour
 		velocity = 3.32f;
 		skipCount = 0;
 		dead = false;
+		airTime = TimeSpan.Zero;
+
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger("Air");
 
