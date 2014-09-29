@@ -17,7 +17,9 @@ public class Game : MonoBehaviour
 	}
 
 	private State state = State.mainMenu;
-	public Animator TitleTextAnimator;
+	public Transform TitleTextTransform;
+	public Transform TextClickAnywhereTransform;
+
 	public Animator SkipperAnimator;
 	public Transform SkipperTransform;
 	public Skipper skipper;
@@ -26,19 +28,24 @@ public class Game : MonoBehaviour
 
 	private TweenTransformWrap SkipperTransformWrap;
 	private TweenTransformWrap CameraTrasnsformWrap;
+	private TweenTransformWrap TextTitleTrasnsformWrap;
+	private TweenTransformWrap TextClickAnywhereTransformWrap;
+
 	private int maxSkips;
 	private float maxDistance;
 	private float maxAltitude;
 	private float maxAirTime;
 	private int gamesFinished;
 
-	private bool sound;
+	private bool soundOn;
 
 	// Use this for initialization
 	private void Start()
 	{
 		SkipperTransformWrap = new TweenTransformWrap(SkipperTransform);
 		CameraTrasnsformWrap = new TweenTransformWrap(camera.transform);
+		TextTitleTrasnsformWrap = new TweenTransformWrap(TitleTextTransform);
+		TextClickAnywhereTransformWrap = new TweenTransformWrap(TextClickAnywhereTransform);
 		
 		SkipperTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0.5f)).x - 0.5f, 0, 0);
 		camera.transform.position = new Vector3(camera.transform.position.x, 1, camera.transform.position.z);
@@ -48,7 +55,7 @@ public class Game : MonoBehaviour
 		maxAltitude = PlayerPrefs.GetFloat("maxAltitude", 0);
 		maxAirTime = PlayerPrefs.GetFloat("maxAirTime", 0);
 		gamesFinished = PlayerPrefs.GetInt("gamesFinished", 0);
-		sound = (PlayerPrefs.GetInt("sound", 1) == 1);
+		soundOn = (PlayerPrefs.GetInt("soundOn", 1) == 1);
 
 		//Tweener.Tween(SkipperTrasnsformWrap, new { X = 0.5f }, 2)
 		//	.OnComplete(() => Tweener.Tween(SkipperTrasnsformWrap, new { X = 0f }, 1));
@@ -83,19 +90,30 @@ public class Game : MonoBehaviour
 				if (tap)
 				{
 					state = State.introScene;
-					TitleTextAnimator.SetTrigger("TextExit");
+
+					Tweener.Tween(TextTitleTrasnsformWrap, new{ X = 2 }, 0.9f).Ease(Ease.QuadInOut);
+					Tweener.Tween(TextClickAnywhereTransformWrap, new{ X = 2 }, 0.6f).Ease(Ease.QuadInOut);
+					//TitleTextAnimator.SetTrigger("TextExit");
 					//SkipperAnimator.SetTrigger("StartIntro");
 
+					skipper.renderer.enabled = true;
+
+
 					SkipperTransformWrap.Y = -2;
-					Tweener.Tween(CameraTrasnsformWrap, new{ Y = -2 }, 2f).Ease(Ease.CubeInOut);
-					Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1f / 5f, 0)).x }, 2).Ease(Ease.QuadOut)
+					SkipperTransformWrap.X = camera.ViewportToWorldPoint(new Vector3(-0.1f, 0)).x;
+					SkipperAnimator.SetTrigger("Swim");
+
+					Tweener.Tween(CameraTrasnsformWrap, new{ Y = -1.8 }, 2f).Ease(Ease.CubeInOut);
+					Tweener.Timer(1.5f)
 					       .OnComplete(() =>
-					                   {
-						                   SkipperAnimator.SetTrigger("Scared");
-						                   Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.5f, 0)).x }, 1).Ease(Ease.QuadOut);
-						                   Tweener.Tween(SkipperTransformWrap, new{ Y = 0, EulerAnglesZ = 35 }, 0.9f).Ease(Ease.ExpoIn);
-						                   Tweener.Tween(CameraTrasnsformWrap, new{ Y = 0 }, 0.9f); //.Ease(Ease.CubeInOut);
-					                   });
+					                   Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1f / 5f, 0)).x }, 2).Ease(Ease.QuadOut)
+					                          .OnComplete(() =>
+					                                      {
+						                                      SkipperAnimator.SetTrigger("Scared");
+						                                      Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.5f, 0)).x }, 1).Ease(Ease.QuadOut);
+						                                      Tweener.Tween(SkipperTransformWrap, new{ Y = 0, EulerAnglesZ = 35 }, 0.9f).Ease(Ease.ExpoIn);
+						                                      Tweener.Tween(CameraTrasnsformWrap, new{ Y = 0 }, 0.9f); //.Ease(Ease.CubeInOut);
+					                                      }));
 				}
 
 				break;
@@ -197,13 +215,13 @@ public class Game : MonoBehaviour
 		SkipperAnimator.SetTrigger("Scared");
 		//killer.animate("mouthOpen");
 		//Tweener.Tween(Crafty.viewport).to({y: -(300 * Game.scale)}, 2);
-		Tweener.Tween(CameraTrasnsformWrap, new{ Y = -2 }, 2f).Ease(Ease.CubeInOut);
+		Tweener.Tween(CameraTrasnsformWrap, new{ Y = -1.8 }, 2f).Ease(Ease.CubeInOut);
 
 		//Game.playSound("scream");
 		//Game.playSound("swim");
 
 		Tweener.Tween(SkipperTransformWrap, new { EulerAnglesZ = 360 }, 0.5f).Ease(Ease.CubeInOut).OnComplete(() => { SkipperTransformWrap.EulerAnglesZ = 0; });
-		Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.7f, 0)).x }, 1.9f).Ease(Ease.QuadOut)
+		Tweener.Tween(SkipperTransformWrap, new { X = camera.ViewportToWorldPoint(new Vector3(0.7f, 0)).x, Y = -2 }, 1.9f).Ease(Ease.QuadOut)
 		       .OnComplete(() =>
 		                   {
 			                   skipper.renderer.enabled = false;
@@ -212,7 +230,10 @@ public class Game : MonoBehaviour
 		       .OnComplete(() =>
 		                   {
 			                   Tweener.Tween(CameraTrasnsformWrap, new{ Y = 1 }, 1f).Ease(Ease.CubeInOut);
-			                   TitleTextAnimator.SetTrigger("TextEnter");
+			                   TextTitleTrasnsformWrap.X = -1.5f;
+							   TextClickAnywhereTransformWrap.X = -1.5f;
+							   Tweener.Tween(TextTitleTrasnsformWrap, new { X = 0.5 }, 0.9f).Ease(Ease.QuadOut);
+							   Tweener.Tween(TextClickAnywhereTransformWrap, new { X = 0.5 }, 0.6f).Ease(Ease.QuadOut).OnComplete(() => state = State.mainMenu);
 		                   });
 
 

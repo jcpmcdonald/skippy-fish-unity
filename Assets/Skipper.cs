@@ -14,6 +14,8 @@ public class Skipper : MonoBehaviour
 	public float maxHeight;
 	public float airTime;
 
+	public GUIText textSkipQuality;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -113,7 +115,9 @@ public class Skipper : MonoBehaviour
 			//TextGenerator textGen = new TextGenerator(3);
 			//textGen.Populate("Good", tgs);
 
-			print(jumpQuality);
+			//print(jumpQuality);
+			textSkipQuality.text = jumpQuality;
+			textSkipQuality.color = new Color(textSkipQuality.color.r, textSkipQuality.color.g, textSkipQuality.color.b, 1);
 		}
 	}
 }
