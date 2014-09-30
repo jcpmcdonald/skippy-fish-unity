@@ -19,7 +19,9 @@ public class Skipper : MonoBehaviour
 
 	public Text seconds;
 	public Text millis;
-	public GUIText textSkipQuality;
+	public Text textSkipQuality;
+
+	private bool skippedThisFall = false;
 
 	// Use this for initialization
 	void Start ()
@@ -40,6 +42,13 @@ public class Skipper : MonoBehaviour
 			airTime += TimeSpan.FromSeconds(Time.deltaTime);
 			seconds.text = ((int)airTime.TotalSeconds).ToString();
 			millis.text = (airTime.Milliseconds / 10).ToString("00");
+
+			// Prevent jumping twice in one fall
+			if (velocity > 0)
+			{
+				//console.log("skip reset");
+				skippedThisFall = false;
+			}
 		}
 	}
 
@@ -63,9 +72,9 @@ public class Skipper : MonoBehaviour
 
 	public void Skip(float depth)
 	{
-		if (!started) return;
+		if (!started || skippedThisFall) return;
 
-		const float perfectSkip = 5;
+		const float perfectSkip = 0;
 		//const float perfectSkip = 0;
 
 		//var percentPerfect = 1 - (Math.abs(depth - 10) / 20);  // ORIG
@@ -119,6 +128,7 @@ public class Skipper : MonoBehaviour
 			//print(jumpQuality);
 			textSkipQuality.text = jumpQuality;
 			textSkipQuality.color = new Color(textSkipQuality.color.r, textSkipQuality.color.g, textSkipQuality.color.b, 1);
+			skippedThisFall = true;
 		}
 	}
 }

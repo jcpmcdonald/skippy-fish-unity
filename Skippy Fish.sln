@@ -1,8 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
-Project("{C73561B2-299A-497F-B3F9-E3919A5937E8}") = "Skippy Fish", "Assembly-CSharp-firstpass.csproj", "{5EB679CF-5515-6C52-FBF7-7E30DE151835}"
-EndProject
 Project("{C73561B2-299A-497F-B3F9-E3919A5937E8}") = "Skippy Fish", "Assembly-CSharp.csproj", "{D9A98F66-BB24-E46F-9B78-7BAC975C596F}"
 EndProject
 Global
@@ -11,10 +9,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5EB679CF-5515-6C52-FBF7-7E30DE151835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EB679CF-5515-6C52-FBF7-7E30DE151835}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EB679CF-5515-6C52-FBF7-7E30DE151835}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EB679CF-5515-6C52-FBF7-7E30DE151835}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9A98F66-BB24-E46F-9B78-7BAC975C596F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9A98F66-BB24-E46F-9B78-7BAC975C596F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9A98F66-BB24-E46F-9B78-7BAC975C596F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -23,7 +17,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																		GlobalSection(MonoDevelopProperties) = preSolution
+																																					GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
