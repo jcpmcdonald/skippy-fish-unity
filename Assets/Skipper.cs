@@ -120,11 +120,6 @@ public class Skipper : MonoBehaviour
 				}
 			}
 
-			//var tgs = new TextGenerationSettings();
-			//tgs.font = new Font("Lobster");
-			//TextGenerator textGen = new TextGenerator(3);
-			//textGen.Populate("Good", tgs);
-
 			//print(jumpQuality);
 			textSkipQuality.text = jumpQuality;
 			textSkipQuality.color = new Color(textSkipQuality.color.r, textSkipQuality.color.g, textSkipQuality.color.b, 1);

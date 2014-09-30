@@ -32,17 +32,25 @@ public class Game : MonoBehaviour
 	public Text BestScore;
 	public Text BestScoreSecs;
 	public Text BestScoreMillis;
+	public Text NewRecord;
+
+	public Image NewRecordStar1;
+	public Image NewRecordStar2;
 
 	private TweenTransformWrap SkipperTransformWrap;
+	private TweenTransformWrap SnappyTransformWrap;
 	private TweenTransformWrap CameraTransformWrap;
 	private TweenTransformWrap TextTitleTransformWrap;
 	private TweenTransformWrap TextClickAnywhereTransformWrap;
 	private TweenTransformWrap CurrentScoreTextTransformWrap;
 	private TweenTransformWrap LastTransformWrap;
 	private TweenTransformWrap BestTransformWrap;
+	private TweenTransformWrap NewRecordTransformWrap;
 
 
 	public Skipper skipper;
+	public Animator SnappyAnimator;
+	public Transform SnappyTransform;
 
 	private Tweener Tweener = new Tweener();
 
@@ -61,23 +69,31 @@ public class Game : MonoBehaviour
 		CurrentScoreText.transform.position = new Vector3(CurrentScoreText.transform.position.x - UICanvas.pixelRect.width, CurrentScoreText.transform.position.y);
 		LastScore.transform.position = new Vector3(LastScore.transform.position.x - UICanvas.pixelRect.width, LastScore.transform.position.y);
 		BestScore.transform.position = new Vector3(BestScore.transform.position.x - UICanvas.pixelRect.width, BestScore.transform.position.y);
+		NewRecord.transform.position = new Vector3(NewRecord.transform.position.x - UICanvas.pixelRect.width, NewRecord.transform.position.y);
+
+		//-(SnappyAnimator.renderer.bounds.size.x)
+		SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(-1f, 0)).x, -1);
 
 
 		SkipperTransformWrap = new TweenTransformWrap(SkipperTransform);
+		SnappyTransformWrap = new TweenTransformWrap(SnappyTransform);
 		CameraTransformWrap = new TweenTransformWrap(camera.transform);
 		TextTitleTransformWrap = new TweenTransformWrap(TitleTextTransform);
 		TextClickAnywhereTransformWrap = new TweenTransformWrap(ClickAnywhere.transform);
 		CurrentScoreTextTransformWrap = new TweenTransformWrap(CurrentScoreText.transform);
 		LastTransformWrap = new TweenTransformWrap(LastScore.transform);
 		BestTransformWrap = new TweenTransformWrap(BestScore.transform);
-		
-		SkipperTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0.5f)).x - 0.5f, 0, 0);
+		NewRecordTransformWrap = new TweenTransformWrap(NewRecord.transform);
+
+
+		SkipperTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0)).x - 0.5f, 0, 0);
+		//SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0)).x - 0.5f, 0, 0);
 		camera.transform.position = new Vector3(camera.transform.position.x, 1, camera.transform.position.z);
 
 		maxSkips = PlayerPrefs.GetInt("maxSkips", 0);
 		maxDistance =PlayerPrefs.GetFloat("maxDistance", 0);
 		maxAltitude = PlayerPrefs.GetFloat("maxAltitude", 0);
-		maxAirTime = TimeSpan.FromSeconds(PlayerPrefs.GetFloat("maxAirTime", 0));
+		maxAirTime = TimeSpan.FromSeconds(0);//PlayerPrefs.GetFloat("maxAirTime", 0));
 		gamesFinished = PlayerPrefs.GetInt("gamesFinished", 0);
 		soundOn = (PlayerPrefs.GetInt("soundOn", 1) == 1);
 
@@ -122,6 +138,7 @@ public class Game : MonoBehaviour
 					{
 						Tweener.Tween(LastTransformWrap, new { X = LastTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { LastTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
 						Tweener.Tween(BestTransformWrap, new { X = BestTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { BestTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
+						Tweener.Tween(NewRecordTransformWrap, new { X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { NewRecordTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
 					}
 
 					skipper.renderer.enabled = true;
@@ -130,19 +147,24 @@ public class Game : MonoBehaviour
 					SkipperTransformWrap.Y = -2;
 					SkipperTransformWrap.X = camera.ViewportToWorldPoint(new Vector3(-0.1f, 0)).x;
 					SkipperAnimator.SetTrigger("Swim");
+					SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(-1f, 0)).x, -1);
 
 					Tweener.Tween(CameraTransformWrap, new{ Y = -1.7 }, 2f).Ease(Ease.CubeInOut);
 					Tweener.Timer(1.5f)
 					       .OnComplete(() =>
-					                   Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1f / 5f, 0)).x }, 2).Ease(Ease.QuadOut)
-					                          .OnComplete(() =>
-					                                      {
-						                                      Tweener.Tween(CurrentScoreTextTransformWrap, new{ X = CurrentScoreTextTransformWrap.X + UICanvas.pixelRect.width }, 1).Ease(Ease.ExpoIn);
-						                                      SkipperAnimator.SetTrigger("Scared");
-						                                      Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.5f, 0)).x }, 1).Ease(Ease.QuadOut);
-						                                      Tweener.Tween(SkipperTransformWrap, new{ Y = 0, EulerAnglesZ = 35 }, 0.9f).Ease(Ease.ExpoIn);
-						                                      Tweener.Tween(CameraTransformWrap, new{ Y = 0 }, 0.9f); //.Ease(Ease.CubeInOut);
-					                                      }));
+					                   {
+						                   Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(-0.07f, 0)).x }, 2).Ease(Ease.QuadOut)
+						                          .OnComplete(() => Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(-0.1f, 0)).x }, 0.5f).Ease(Ease.QuadInOut));
+						                   Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1f / 5f, 0)).x }, 2).Ease(Ease.QuadOut)
+						                          .OnComplete(() =>
+						                                      {
+							                                      Tweener.Tween(CurrentScoreTextTransformWrap, new{ X = CurrentScoreTextTransformWrap.X + UICanvas.pixelRect.width }, 1).Ease(Ease.ExpoIn);
+							                                      SkipperAnimator.SetTrigger("Scared");
+							                                      Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.5f, 0)).x }, 1).Ease(Ease.QuadOut);
+							                                      Tweener.Tween(SkipperTransformWrap, new{ Y = 0, EulerAnglesZ = 35 }, 0.9f).Ease(Ease.ExpoIn);
+							                                      Tweener.Tween(CameraTransformWrap, new{ Y = 0 }, 0.9f); //.Ease(Ease.CubeInOut);
+						                                      });
+					                   });
 				}
 
 				break;
@@ -178,20 +200,11 @@ public class Game : MonoBehaviour
 		
 		//print(depth);
 
-
-		//while (i < Input.touchCount)
-		//{
-		//	if (Input.GetTouch(i).phase == TouchPhase.Began)
-		//		clone = Instantiate(projectile, transform.position, transform.rotation) as GameObject;
-
-		//	++i;
-		//}
 	}
 
 
 	void PlayOutro()
 	{
-		bool newBest = false;
 		if (skipper.skipCount == 0)
 		{
 			// Show them some instructions
@@ -216,13 +229,19 @@ public class Game : MonoBehaviour
 		if(skipper.airTime > maxAirTime){
 			maxAirTime = skipper.airTime;
 			PlayerPrefs.SetFloat("maxAirTime", (float)maxAirTime.TotalSeconds);
-			newBest = true;
-			//Crafty.storage('maxAirTime', Game.maxAirTime);
-			//$("#newAirTimeRecord").show();
-			//$("#scoreBestAirTime").hide();
+			NewRecord.gameObject.SetActive(true);
+			BestScore.gameObject.SetActive(false);
+			//NewRecord.enabled = true;
+			//NewRecordStar1.enabled = true;
+			//NewRecordStar2.enabled = true;
+			//BestScore.enabled = false;
 		} else {
-			//$("#newAirTimeRecord").hide();
-			//$("#scoreBestAirTime").show();
+			NewRecord.gameObject.SetActive(false);
+			BestScore.gameObject.SetActive(true);
+			//NewRecord.enabled = false;
+			//NewRecordStar1.enabled = false;
+			//NewRecordStar2.enabled = false;
+			//BestScore.enabled = true;
 		}
 
 		LastScoreSecs.text = ((int)skipper.airTime.TotalSeconds).ToString();
@@ -246,11 +265,22 @@ public class Game : MonoBehaviour
 		//Game.playSound("swim");
 
 		Tweener.Tween(SkipperTransformWrap, new { EulerAnglesZ = 360 }, 0.5f).Ease(Ease.CubeInOut).OnComplete(() => { SkipperTransformWrap.EulerAnglesZ = 0; });
-		Tweener.Tween(SkipperTransformWrap, new { X = camera.ViewportToWorldPoint(new Vector3(0.7f, 0)).x, Y = -2 }, 1.9f).Ease(Ease.QuadOut)
+		Tweener.Tween(SkipperTransformWrap, new { X = camera.ViewportToWorldPoint(new Vector3(0.7f, 0)).x, Y = -2 }, 1.7f).Ease(Ease.QuadOut)
 		       .OnComplete(() =>
 		                   {
 			                   skipper.renderer.enabled = false;
 		                   });
+
+		SnappyAnimator.SetTrigger("Open");
+		Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.7f, 0)).x, Y = -2 }, 2.1f).Ease(Ease.QuadOut);
+		Tweener.Timer(1.0f)
+		       .OnComplete(() =>
+		                   {
+			                   SnappyAnimator.SetTrigger("Chew");
+			                   Tweener.Timer(1.0f).OnComplete(() => Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1.3f, 0)).x, Y = -2 }, 0.7f).Ease(Ease.QuadInOut));
+			                   Tweener.Timer(1.5f).OnComplete(() => SnappyAnimator.SetTrigger("Close"));
+		                   });
+
 		Tweener.Timer(2.8f)
 		       .OnComplete(() =>
 		                   {
@@ -262,6 +292,7 @@ public class Game : MonoBehaviour
 			                   // Show your score
 			                   Tweener.Tween(LastTransformWrap, new{ X = LastTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
 			                   Tweener.Tween(BestTransformWrap, new{ X = BestTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
+			                   Tweener.Tween(NewRecordTransformWrap, new{ X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
 
 			                   // Move the camera up and show the main menu
 			                   ClickAnywhere.text = "(tap anywhere to restart)";
