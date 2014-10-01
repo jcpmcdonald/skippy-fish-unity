@@ -62,9 +62,25 @@ public class Game : MonoBehaviour
 
 	private bool soundOn;
 
+	private AudioSource audioSource;
+	public AudioClip scream;
+	public AudioClip chew;
+	public AudioClip waterReentry;
+	public AudioClip swim;
+	public AudioClip bubbles;
+
+	//void Awake()
+	//{
+	//	//audioSkip = AddAudio(clipSkip, false, false, 1.0f);
+	//	audioSource = gameObject.AddComponent<AudioSource>();
+	//	audioSource.volume = 1.0f;
+	//}
+
 	// Use this for initialization
 	private void Start()
 	{
+		audioSource = gameObject.GetComponent<AudioSource>();
+
 		// Move the score off-screen left
 		CurrentScoreText.transform.position = new Vector3(CurrentScoreText.transform.position.x - UICanvas.pixelRect.width, CurrentScoreText.transform.position.y);
 		LastScore.transform.position = new Vector3(LastScore.transform.position.x - UICanvas.pixelRect.width, LastScore.transform.position.y);
@@ -147,9 +163,10 @@ public class Game : MonoBehaviour
 					SkipperTransformWrap.Y = -2;
 					SkipperTransformWrap.X = camera.ViewportToWorldPoint(new Vector3(-0.1f, 0)).x;
 					SkipperAnimator.SetTrigger("Swim");
+					audioSource.PlayOneShot(swim);
 					SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(-1f, 0)).x, -1);
 
-					Tweener.Tween(CameraTransformWrap, new{ Y = -1.7 }, 2f).Ease(Ease.CubeInOut);
+					Tweener.Tween(CameraTransformWrap, new{ Y = -1.6 }, 2f).Ease(Ease.CubeInOut);
 					Tweener.Timer(1.5f)
 					       .OnComplete(() =>
 					                   {
@@ -160,6 +177,7 @@ public class Game : MonoBehaviour
 						                                      {
 							                                      Tweener.Tween(CurrentScoreTextTransformWrap, new{ X = CurrentScoreTextTransformWrap.X + UICanvas.pixelRect.width }, 1).Ease(Ease.ExpoIn);
 							                                      SkipperAnimator.SetTrigger("Scared");
+							                                      audioSource.PlayOneShot(bubbles);
 							                                      Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(0.5f, 0)).x }, 1).Ease(Ease.QuadOut);
 							                                      Tweener.Tween(SkipperTransformWrap, new{ Y = 0, EulerAnglesZ = 35 }, 0.9f).Ease(Ease.ExpoIn);
 							                                      Tweener.Tween(CameraTransformWrap, new{ Y = 0 }, 0.9f); //.Ease(Ease.CubeInOut);
@@ -205,6 +223,11 @@ public class Game : MonoBehaviour
 
 	void PlayOutro()
 	{
+
+		audioSource.PlayOneShot(waterReentry);
+		audioSource.PlayOneShot(scream);
+		audioSource.PlayOneShot(swim);
+
 		if (skipper.skipCount == 0)
 		{
 			// Show them some instructions
@@ -259,7 +282,7 @@ public class Game : MonoBehaviour
 		SkipperAnimator.SetTrigger("Scared");
 		//killer.animate("mouthOpen");
 		//Tweener.Tween(Crafty.viewport).to({y: -(300 * Game.scale)}, 2);
-		Tweener.Tween(CameraTransformWrap, new{ Y = -1.7 }, 2f).Ease(Ease.CubeInOut);
+		Tweener.Tween(CameraTransformWrap, new{ Y = -1.6 }, 2f).Ease(Ease.CubeInOut);
 
 		//Game.playSound("scream");
 		//Game.playSound("swim");
@@ -277,6 +300,7 @@ public class Game : MonoBehaviour
 		       .OnComplete(() =>
 		                   {
 			                   SnappyAnimator.SetTrigger("Chew");
+			                   audioSource.PlayOneShot(chew);
 			                   Tweener.Timer(1.0f).OnComplete(() => Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1.3f, 0)).x, Y = -2 }, 0.7f).Ease(Ease.QuadInOut));
 			                   Tweener.Timer(1.5f).OnComplete(() => SnappyAnimator.SetTrigger("Close"));
 		                   });

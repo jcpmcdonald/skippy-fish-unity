@@ -23,6 +23,27 @@ public class Skipper : MonoBehaviour
 
 	private bool skippedThisFall = false;
 
+	public AudioSource audioSource;
+	public AudioClip skip;
+	
+
+	//AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol) {
+	//	var newAudio = gameObject.AddComponent<AudioSource>();
+	//	newAudio.clip = clip;
+	//	newAudio.loop = loop;
+	//	newAudio.playOnAwake = playAwake;
+	//	newAudio.volume = vol;
+	//	return newAudio;
+	//}
+
+	//void Awake()
+	//{
+	//	//audioSkip = AddAudio(clipSkip, false, false, 1.0f);
+	//	audioSource = gameObject.AddComponent<AudioSource>();
+	//	audioSource.volume = 1.0f;
+	//	audioSource.maxDistance = 0;
+	//}
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -60,6 +81,8 @@ public class Skipper : MonoBehaviour
 		skipCount = 0;
 		dead = false;
 		airTime = TimeSpan.Zero;
+
+		audioSource.PlayOneShot(skip);
 
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger("Air");
@@ -124,6 +147,8 @@ public class Skipper : MonoBehaviour
 			textSkipQuality.text = jumpQuality;
 			textSkipQuality.color = new Color(textSkipQuality.color.r, textSkipQuality.color.g, textSkipQuality.color.b, 1);
 			skippedThisFall = true;
+
+			audioSource.PlayOneShot(skip);
 		}
 	}
 }

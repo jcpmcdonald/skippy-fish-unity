@@ -70,6 +70,7 @@
      <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\MonoPInvokeCallbackAttribute.cs" />
      <Compile Include="Assets\GoogleMobileAdsDemoScript.cs" />
      <Compile Include="Assets\Skipper.cs" />
+     <Compile Include="Assets\ToggleButton.cs" />
      <Compile Include="Assets\TweenV3Wrap.cs" />
      <Compile Include="Assets\glide\Ease.cs" />
      <Compile Include="Assets\glide\GlideInfo.cs" />
