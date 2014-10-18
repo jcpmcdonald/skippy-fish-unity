@@ -1,5 +1,4 @@
 ﻿using System.Net.Mime;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -7,15 +6,20 @@ using UnityEngine.UI;
 public class ToggleButton : MonoBehaviour {
 	private bool enabled1;
 
+
+	public bool defaultState = true;
+
 	public Image imageToTint;
 	public Color enabledColor;
 	public Color disabledColor;
 
 	public Display.DisplaysUpdatedDelegate asdf;
 
+
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
+		Enabled = defaultState;
 	}
 	
 	// Update is called once per frame

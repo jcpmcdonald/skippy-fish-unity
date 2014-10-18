@@ -47,7 +47,6 @@ public class Game : MonoBehaviour
 	private TweenTransformWrap BestTransformWrap;
 	private TweenTransformWrap NewRecordTransformWrap;
 
-
 	public Skipper skipper;
 	public Animator SnappyAnimator;
 	public Transform SnappyTransform;
@@ -60,8 +59,6 @@ public class Game : MonoBehaviour
 	private TimeSpan maxAirTime;
 	private int gamesFinished;
 
-	private bool soundOn;
-
 	private AudioSource audioSource;
 	public AudioClip scream;
 	public AudioClip chew;
@@ -69,17 +66,42 @@ public class Game : MonoBehaviour
 	public AudioClip swim;
 	public AudioClip bubbles;
 
-	//void Awake()
-	//{
+	public RectTransform soundPanel;
+
+	public ToggleButton soundButton;
+	public ToggleButton muteButton;
+
+	public SpriteRenderer fail;
+	private TweenColorWrap failColorWrap;
+
+	void Awake()
+	{
 	//	//audioSkip = AddAudio(clipSkip, false, false, 1.0f);
 	//	audioSource = gameObject.AddComponent<AudioSource>();
 	//	audioSource.volume = 1.0f;
-	//}
+
+		
+	}
+
+
+	public void SoundSettingsChanged()
+	{
+		PlayerPrefs.SetInt("soundOn", audioSource.mute ? 0 : 1);
+	}
+
 
 	// Use this for initialization
 	private void Start()
 	{
 		audioSource = gameObject.GetComponent<AudioSource>();
+
+		bool soundOn = (PlayerPrefs.GetInt("soundOn", 1) == 1);
+		if (!soundOn)
+		{
+			soundButton.Enabled = false;
+			muteButton.Enabled = true;
+			audioSource.mute = true;
+		}
 
 		// Move the score off-screen left
 		CurrentScoreText.transform.position = new Vector3(CurrentScoreText.transform.position.x - UICanvas.pixelRect.width, CurrentScoreText.transform.position.y);
@@ -101,6 +123,8 @@ public class Game : MonoBehaviour
 		BestTransformWrap = new TweenTransformWrap(BestScore.transform);
 		NewRecordTransformWrap = new TweenTransformWrap(NewRecord.transform);
 
+		failColorWrap = new TweenColorWrap(fail);
+
 
 		SkipperTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0)).x - 0.5f, 0, 0);
 		//SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(0, 0)).x - 0.5f, 0, 0);
@@ -109,9 +133,9 @@ public class Game : MonoBehaviour
 		maxSkips = PlayerPrefs.GetInt("maxSkips", 0);
 		maxDistance =PlayerPrefs.GetFloat("maxDistance", 0);
 		maxAltitude = PlayerPrefs.GetFloat("maxAltitude", 0);
-		maxAirTime = TimeSpan.FromSeconds(0);//PlayerPrefs.GetFloat("maxAirTime", 0));
+		maxAirTime = TimeSpan.FromSeconds(PlayerPrefs.GetFloat("maxAirTime", 0));
 		gamesFinished = PlayerPrefs.GetInt("gamesFinished", 0);
-		soundOn = (PlayerPrefs.GetInt("soundOn", 1) == 1);
+		
 
 		//Tweener.Tween(SkipperTrasnsformWrap, new { X = 0.5f }, 2)
 		//	.OnComplete(() => Tweener.Tween(SkipperTrasnsformWrap, new { X = 0f }, 1));
@@ -124,15 +148,29 @@ public class Game : MonoBehaviour
 	void Update ()
 	{
 
+		
+
 		if (Input.GetKeyDown(KeyCode.Escape)) { Application.Quit(); }
 
 		Tweener.Update(Time.deltaTime);
 
+		//print(camera.WorldToViewportPoint(Input.mousePosition));
+
 		int i = 0;
-		bool tap = Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0);
+
+		
+		print(RectTransformUtility.RectangleContainsScreenPoint(soundPanel, Input.mousePosition, camera));
+		//print(RectTransformUtility.PixelAdjustRect(soundPanel, UICanvas));//.Contains(Input.mousePosition));
+		print(camera.ViewportToScreenPoint(soundPanel.anchorMax).x - soundPanel.rect.width);
+
+		Vector2 topLeft = (Vector2)soundPanel.transform.position - (soundPanel.sizeDelta / 2f);
+		Rect soundRect = new Rect(topLeft.x, topLeft.y, soundPanel.sizeDelta.x, soundPanel.sizeDelta.y);
+
+
+		bool tap = (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)) && !soundRect.Contains(Input.mousePosition);
 		while (i < Input.touchCount)
 		{
-			tap = tap || Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Ended;
+			tap = tap || ((Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Ended) && !soundRect.Contains(Input.GetTouch(i).position));
 			i++;
 		}
 
@@ -164,14 +202,19 @@ public class Game : MonoBehaviour
 					SkipperTransformWrap.X = camera.ViewportToWorldPoint(new Vector3(-0.1f, 0)).x;
 					SkipperAnimator.SetTrigger("Swim");
 					audioSource.PlayOneShot(swim);
-					SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(-1f, 0)).x, -1);
+
+					SnappyAnimator.SetTrigger("Open");
+					SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(-1f, 0)).x, -2);
+
+					Tweener.Timer(3.3f).OnComplete(() => SnappyAnimator.SetTrigger("Close"));
 
 					Tweener.Tween(CameraTransformWrap, new{ Y = -1.6 }, 2f).Ease(Ease.CubeInOut);
 					Tweener.Timer(1.5f)
 					       .OnComplete(() =>
 					                   {
-						                   Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(-0.07f, 0)).x }, 2).Ease(Ease.QuadOut)
-						                          .OnComplete(() => Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(-0.1f, 0)).x }, 0.5f).Ease(Ease.QuadInOut));
+						                   Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(-0.07f, 0)).x }, 2.1f).Ease(Ease.QuadOut)
+						                          .OnComplete(() => Tweener.Tween(SnappyTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(-0.12f, 0)).x }, 0.5f).Ease(Ease.QuadInOut))
+						                          .OnComplete(() => Tweener.Tween(SnappyTransformWrap, new{ Y = -1 }, 3.5f).Ease(Ease.QuadInOut));
 						                   Tweener.Tween(SkipperTransformWrap, new{ X = camera.ViewportToWorldPoint(new Vector3(1f / 5f, 0)).x }, 2).Ease(Ease.QuadOut)
 						                          .OnComplete(() =>
 						                                      {
@@ -218,6 +261,8 @@ public class Game : MonoBehaviour
 		
 		//print(depth);
 
+
+		//UICanvas.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, UICanvas.transform.position.z);
 	}
 
 
@@ -232,6 +277,7 @@ public class Game : MonoBehaviour
 		{
 			// Show them some instructions
 			//fail.show();
+			fail.enabled = true;
 		}
 
 		if(skipper.skipCount > maxSkips){
@@ -317,6 +363,12 @@ public class Game : MonoBehaviour
 			                   Tweener.Tween(LastTransformWrap, new{ X = LastTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
 			                   Tweener.Tween(BestTransformWrap, new{ X = BestTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
 			                   Tweener.Tween(NewRecordTransformWrap, new{ X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
+
+			                   Tweener.Tween(failColorWrap, new{ A = 0 }, 0.5f).OnComplete(() =>
+			                                                                               {
+				                                                                               failColorWrap.A = 1f;
+				                                                                               fail.renderer.enabled = false;
+			                                                                               });
 
 			                   // Move the camera up and show the main menu
 			                   ClickAnywhere.text = "(tap anywhere to restart)";

@@ -25,6 +25,8 @@ public class Skipper : MonoBehaviour
 
 	public AudioSource audioSource;
 	public AudioClip skip;
+
+	public Transform splash;
 	
 
 	//AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol) {
@@ -147,6 +149,10 @@ public class Skipper : MonoBehaviour
 			textSkipQuality.text = jumpQuality;
 			textSkipQuality.color = new Color(textSkipQuality.color.r, textSkipQuality.color.g, textSkipQuality.color.b, 1);
 			skippedThisFall = true;
+
+
+			Transform s = (Transform)Instantiate(splash, Vector3.zero, Quaternion.identity);
+
 
 			audioSource.PlayOneShot(skip);
 		}

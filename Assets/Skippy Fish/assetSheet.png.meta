@@ -16,6 +16,7 @@ TextureImporter:
     21300022: Splash 0
     21300024: Splash 1
     21300026: Splash 2
+    21300028: Splash 3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -183,6 +184,16 @@ TextureImporter:
         x: 421
         y: 34
         width: 57
+        height: 9
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Splash 3
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 34
+        width: 49
         height: 9
       alignment: 0
       pivot: {x: .5, y: .5}
