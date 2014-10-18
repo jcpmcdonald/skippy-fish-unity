@@ -14,15 +14,15 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
 	public void Start()
 	{
 		RequestBanner();
-		bannerView.Show();
+		//bannerView.Show();
 	}
 
 
-    void OnGUI()
-    {
 
 
-        // Puts some basic buttons onto the screen.
+	//void OnGUI()
+	//{
+		// Puts some basic buttons onto the screen.
 		//GUI.skin.button.fontSize = (int) (0.05f * Screen.height);
 
 		//Rect requestBannerRect = new Rect(0.1f * Screen.width, 0.05f * Screen.height,
@@ -73,7 +73,7 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
 		//{
 		//	interstitial.Destroy();
 		//}
-    }
+    //}
 
     private void RequestBanner()
     {
@@ -100,30 +100,30 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
         bannerView.LoadAd(createAdRequest());
     }
 
-    private void RequestInterstitial()
-    {
-        #if UNITY_EDITOR
-            string adUnitId = "unused";
-        #elif UNITY_ANDROID
-            string adUnitId = "INSERT_ANDROID_INTERSTITIAL_AD_UNIT_ID_HERE";
-        #elif UNITY_IPHONE
-            string adUnitId = "INSERT_IOS_INTERSTITIAL_AD_UNIT_ID_HERE";
-        #else
-            string adUnitId = "unexpected_platform";
-        #endif
+	//private void RequestInterstitial()
+	//{
+	//	#if UNITY_EDITOR
+	//		string adUnitId = "unused";
+	//	#elif UNITY_ANDROID
+	//		string adUnitId = "INSERT_ANDROID_INTERSTITIAL_AD_UNIT_ID_HERE";
+	//	#elif UNITY_IPHONE
+	//		string adUnitId = "INSERT_IOS_INTERSTITIAL_AD_UNIT_ID_HERE";
+	//	#else
+	//		string adUnitId = "unexpected_platform";
+	//	#endif
 
-        // Create an interstitial.
-        interstitial = new InterstitialAd(adUnitId);
-        // Register for ad events.
-        interstitial.AdLoaded += HandleInterstitialLoaded;
-        interstitial.AdFailedToLoad += HandleInterstitialFailedToLoad;
-        interstitial.AdOpened += HandleInterstitialOpened;
-        interstitial.AdClosing += HandleInterstitialClosing;
-        interstitial.AdClosed += HandleInterstitialClosed;
-        interstitial.AdLeftApplication += HandleInterstitialLeftApplication;
-        // Load an interstitial ad.
-        interstitial.LoadAd(createAdRequest());
-    }
+	//	// Create an interstitial.
+	//	interstitial = new InterstitialAd(adUnitId);
+	//	// Register for ad events.
+	//	interstitial.AdLoaded += HandleInterstitialLoaded;
+	//	interstitial.AdFailedToLoad += HandleInterstitialFailedToLoad;
+	//	interstitial.AdOpened += HandleInterstitialOpened;
+	//	interstitial.AdClosing += HandleInterstitialClosing;
+	//	interstitial.AdClosed += HandleInterstitialClosed;
+	//	interstitial.AdLeftApplication += HandleInterstitialLeftApplication;
+	//	// Load an interstitial ad.
+	//	interstitial.LoadAd(createAdRequest());
+	//}
 
     // Returns an ad request with custom ad targeting.
     private AdRequest createAdRequest()
@@ -135,25 +135,25 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
 			    .AddTestDevice(AdRequest.TestDeviceSimulator)
 			    .AddTestDevice("6B2ED5D542B78AD293024BB4AE192C7E")
 			    .AddKeyword("game")
-			    .SetGender(Gender.Male)
-			    .SetBirthday(new DateTime(1985, 1, 1))
+			    //.SetGender(Gender.Male)
+			    .SetBirthday(new DateTime(1998, 1, 1))
 			    .TagForChildDirectedTreatment(false)
 			    .AddExtra("color_bg", "9B30FF")
 			    .Build();
 
     }
 
-    private void ShowInterstitial()
-    {
-        if (interstitial.IsLoaded())
-        {
-            interstitial.Show();
-        }
-        else
-        {
-            print("Interstitial is not ready yet.");
-        }
-    }
+	//private void ShowInterstitial()
+	//{
+	//	if (interstitial.IsLoaded())
+	//	{
+	//		interstitial.Show();
+	//	}
+	//	else
+	//	{
+	//		print("Interstitial is not ready yet.");
+	//	}
+	//}
 
     #region Banner callback handlers
 
@@ -222,4 +222,14 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
     }
 
     #endregion
+
+	public void Hide()
+	{
+		bannerView.Hide();
+	}
+
+	public void Show()
+	{
+		bannerView.Show();
+	}
 }

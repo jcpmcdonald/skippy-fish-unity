@@ -74,6 +74,10 @@ public class Game : MonoBehaviour
 	public SpriteRenderer fail;
 	private TweenColorWrap failColorWrap;
 
+	public GoogleMobileAdsDemoScript Ads;
+
+	private float targetCameraY;
+
 	void Awake()
 	{
 	//	//audioSkip = AddAudio(clipSkip, false, false, 1.0f);
@@ -159,9 +163,9 @@ public class Game : MonoBehaviour
 		int i = 0;
 
 		
-		print(RectTransformUtility.RectangleContainsScreenPoint(soundPanel, Input.mousePosition, camera));
+		//print(RectTransformUtility.RectangleContainsScreenPoint(soundPanel, Input.mousePosition, camera));
 		//print(RectTransformUtility.PixelAdjustRect(soundPanel, UICanvas));//.Contains(Input.mousePosition));
-		print(camera.ViewportToScreenPoint(soundPanel.anchorMax).x - soundPanel.rect.width);
+		//print(camera.ViewportToScreenPoint(soundPanel.anchorMax).x - soundPanel.rect.width);
 
 		Vector2 topLeft = (Vector2)soundPanel.transform.position - (soundPanel.sizeDelta / 2f);
 		Rect soundRect = new Rect(topLeft.x, topLeft.y, soundPanel.sizeDelta.x, soundPanel.sizeDelta.y);
@@ -175,7 +179,7 @@ public class Game : MonoBehaviour
 		}
 
 		float depth = -SkipperTransform.position.y; /* + height */ //- Game.waterSurface();
-		depth = depth * 75; // Convert to the units I used in the old JS version to keep the remaining logic the same
+		depth = depth * 90; // Convert to the units I used in the old JS version to keep the remaining logic the same
 
 
 		switch (state)
@@ -183,6 +187,8 @@ public class Game : MonoBehaviour
 			case State.mainMenu:
 				if (tap)
 				{
+					Ads.Hide();
+
 					state = State.introScene;
 
 					Tweener.Tween(TextTitleTransformWrap, new{ X = TitleTextTransform.position.x + UICanvas.pixelRect.xMax }, 0.9f).Ease(Ease.QuadInOut);
@@ -241,8 +247,20 @@ public class Game : MonoBehaviour
 
 			case State.skipping:
 
-				CameraTransformWrap.Y = SkipperTransform.position.y / 4;
-				//print(depth);
+				float cameraFixedPos = SkipperTransform.position.y - 1.5f;
+				float cameraFlowPos = SkipperTransform.position.y / 4;
+				if (cameraFixedPos > cameraFlowPos)
+				{
+					targetCameraY = cameraFixedPos;
+				}
+				else
+				{
+					targetCameraY = cameraFlowPos;
+				}
+				CameraTransformWrap.Y = Mathf.Lerp(CameraTransformWrap.Y, targetCameraY, Time.deltaTime * 6);
+				//CameraTransformWrap.Y = Mathf.Lerp(CameraTransformWrap.Y, targetCameraY, Time.deltaTime * Math.Abs(CameraTransformWrap.Y - targetCameraY) * 30);
+				
+				//print(CameraTransformWrap.Y + ", " + SkipperTransform.position.y);
 
 				if (depth > 20)
 				{
@@ -332,6 +350,8 @@ public class Game : MonoBehaviour
 
 		//Game.playSound("scream");
 		//Game.playSound("swim");
+
+		Ads.Show();
 
 		Tweener.Tween(SkipperTransformWrap, new { EulerAnglesZ = 360 }, 0.5f).Ease(Ease.CubeInOut).OnComplete(() => { SkipperTransformWrap.EulerAnglesZ = 0; });
 		Tweener.Tween(SkipperTransformWrap, new { X = camera.ViewportToWorldPoint(new Vector3(0.7f, 0)).x, Y = -2 }, 1.7f).Ease(Ease.QuadOut)

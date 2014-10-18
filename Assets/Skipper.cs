@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Skipper : MonoBehaviour
 {
 
-	private float acceleration = -2;
+	private float acceleration = -2.33f;
 	private float velocity;
 	private bool started = false;
 	public bool dead = false;
@@ -60,6 +60,15 @@ public class Skipper : MonoBehaviour
 			//print(velocity);
 			transform.position = new Vector3(transform.position.x, transform.position.y + velocity * Time.deltaTime, 0f);
 
+			float depth = -transform.position.y; /* + height */ //- Game.waterSurface();
+			depth = depth * 90; // Convert to the units I used in the old JS version to keep the remaining logic the same
+
+			if (depth < maxHeight)
+			{
+				maxHeight = depth;
+				//print(maxHeight);
+			}
+
 			transform.eulerAngles = new Vector3(0, 0, Math.Min(velocity, 3) / 3 * 25);
 
 			airTime += TimeSpan.FromSeconds(Time.deltaTime);
@@ -78,16 +87,19 @@ public class Skipper : MonoBehaviour
 
 	public void StartFlight()
 	{
-		print("Flight Started");
+		//print("Flight Started");
 		velocity = 3.32f;
 		skipCount = 0;
 		dead = false;
 		airTime = TimeSpan.Zero;
+		maxHeight = 0;
 
 		audioSource.PlayOneShot(skip);
 
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger("Air");
+
+		Instantiate(splash, Vector3.zero, Quaternion.identity);
 
 		// Even though the flight animation sequence doesn't touch the transform, I need to disable this in order to be able to modify the transform manually
 		//animator.enabled = false;
@@ -113,7 +125,7 @@ public class Skipper : MonoBehaviour
 		//if(this._velocity.y < 0 && depth < 30 && depth > -10){	// ORIG
 		if (velocity < 0 && depth < (20 + perfectSkip) && depth > -(20 - perfectSkip))
 		{
-			velocity = -(velocity * 1.4f * percentPerfect) - (30f / 75f);
+			velocity = -(velocity * 1.4f * percentPerfect) - (30f / 90f);
 			skipCount++;
 
 			var jumpQuality = "";
@@ -151,7 +163,7 @@ public class Skipper : MonoBehaviour
 			skippedThisFall = true;
 
 
-			Transform s = (Transform)Instantiate(splash, Vector3.zero, Quaternion.identity);
+			Instantiate(splash, Vector3.zero, Quaternion.identity);
 
 
 			audioSource.PlayOneShot(skip);
