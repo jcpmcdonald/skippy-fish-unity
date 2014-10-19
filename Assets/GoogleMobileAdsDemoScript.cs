@@ -14,6 +14,7 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
 	public void Start()
 	{
 		RequestBanner();
+		bannerView.Hide();
 		//bannerView.Show();
 	}
 
@@ -231,5 +232,11 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
 	public void Show()
 	{
 		bannerView.Show();
+	}
+
+
+	public void Load()
+	{
+		RequestBanner();
 	}
 }

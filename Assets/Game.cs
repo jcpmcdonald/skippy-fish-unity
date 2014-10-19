@@ -187,7 +187,10 @@ public class Game : MonoBehaviour
 			case State.mainMenu:
 				if (tap)
 				{
-					Ads.Hide();
+					if (!firstPlay)
+					{
+						Ads.Hide();
+					}
 
 					state = State.introScene;
 
