@@ -78,6 +78,18 @@ public class Game : MonoBehaviour
 
 	private float targetCameraY;
 
+	private float titleOnscreenCenter;
+	private float titleOffscreenRight;
+	private float titleOffscreenLeft;
+
+	private float clickAnywhereOnscreenCenter;
+	private float clickAnywhereOffscreenRight;
+	private float clickAnywhereOffscreenLeft;
+
+	private float scoreOnscreenCenter;
+	private float scoreOffscreenRight;
+	private float scoreOffscreenLeft;
+
 	void Awake()
 	{
 	//	//audioSkip = AddAudio(clipSkip, false, false, 1.0f);
@@ -106,6 +118,18 @@ public class Game : MonoBehaviour
 			muteButton.Enabled = true;
 			audioSource.mute = true;
 		}
+		
+		titleOnscreenCenter = TitleTextTransform.position.x;
+		titleOffscreenRight = TitleTextTransform.position.x + UICanvas.pixelRect.xMax;
+		titleOffscreenLeft = TitleTextTransform.position.x - UICanvas.pixelRect.xMax;
+
+		clickAnywhereOnscreenCenter = ClickAnywhere.transform.position.x;
+		clickAnywhereOffscreenRight = ClickAnywhere.transform.position.x + UICanvas.pixelRect.xMax;
+		clickAnywhereOffscreenLeft = ClickAnywhere.transform.position.x - UICanvas.pixelRect.xMax;
+
+		scoreOnscreenCenter = LastScore.transform.position.x;
+		scoreOffscreenRight = LastScore.transform.position.x + UICanvas.pixelRect.xMax;
+		scoreOffscreenLeft = LastScore.transform.position.x - UICanvas.pixelRect.xMax;
 
 		// Move the score off-screen left
 		CurrentScoreText.transform.position = new Vector3(CurrentScoreText.transform.position.x - UICanvas.pixelRect.width, CurrentScoreText.transform.position.y);
@@ -139,7 +163,7 @@ public class Game : MonoBehaviour
 		maxAltitude = PlayerPrefs.GetFloat("maxAltitude", 0);
 		maxAirTime = TimeSpan.FromSeconds(PlayerPrefs.GetFloat("maxAirTime", 0));
 		gamesFinished = PlayerPrefs.GetInt("gamesFinished", 0);
-		
+
 
 		//Tweener.Tween(SkipperTrasnsformWrap, new { X = 0.5f }, 2)
 		//	.OnComplete(() => Tweener.Tween(SkipperTrasnsformWrap, new { X = 0f }, 1));
@@ -194,14 +218,22 @@ public class Game : MonoBehaviour
 
 					state = State.introScene;
 
-					Tweener.Tween(TextTitleTransformWrap, new{ X = TitleTextTransform.position.x + UICanvas.pixelRect.xMax }, 0.9f).Ease(Ease.QuadInOut);
-					Tweener.Tween(TextClickAnywhereTransformWrap, new { X = ClickAnywhere.rectTransform.rect.width + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut);
+
+					//Tweener.Tween(TextTitleTransformWrap, new{ X = TitleTextTransform.position.x + UICanvas.pixelRect.xMax }, 0.9f).Ease(Ease.QuadInOut);
+					//Tweener.Tween(TextClickAnywhereTransformWrap, new { X = ClickAnywhere.rectTransform.rect.width + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut);
+
+					Tweener.Tween(TextTitleTransformWrap, new { X = titleOffscreenRight }, 0.9f).Ease(Ease.QuadInOut);
+					Tweener.Tween(TextClickAnywhereTransformWrap, new { X = clickAnywhereOffscreenRight }, 0.6f).Ease(Ease.QuadInOut);
 
 					if (!firstPlay)
 					{
-						Tweener.Tween(LastTransformWrap, new { X = LastTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { LastTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
-						Tweener.Tween(BestTransformWrap, new { X = BestTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { BestTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
-						Tweener.Tween(NewRecordTransformWrap, new { X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { NewRecordTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
+						//Tweener.Tween(LastTransformWrap, new { X = LastTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { LastTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
+						//Tweener.Tween(BestTransformWrap, new { X = BestTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { BestTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
+						//Tweener.Tween(NewRecordTransformWrap, new { X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { NewRecordTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
+
+						Tweener.Tween(LastTransformWrap, new { X = scoreOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { LastTransformWrap.X = scoreOffscreenLeft; });
+						Tweener.Tween(BestTransformWrap, new { X = scoreOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { BestTransformWrap.X = scoreOffscreenLeft; });
+						Tweener.Tween(NewRecordTransformWrap, new { X = scoreOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { NewRecordTransformWrap.X = scoreOffscreenLeft; });
 					}
 
 					skipper.renderer.enabled = true;
@@ -383,9 +415,13 @@ public class Game : MonoBehaviour
 			                   Tweener.Tween(CurrentScoreTextTransformWrap, new{ X = CurrentScoreTextTransformWrap.X + UICanvas.pixelRect.width }, 1).Ease(Ease.QuadOut).OnComplete(() => { CurrentScoreTextTransformWrap.X -= (UICanvas.pixelRect.width * 2f); });
 
 			                   // Show your score
-			                   Tweener.Tween(LastTransformWrap, new{ X = LastTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
-			                   Tweener.Tween(BestTransformWrap, new{ X = BestTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
-			                   Tweener.Tween(NewRecordTransformWrap, new{ X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
+							   //Tweener.Tween(LastTransformWrap, new{ X = LastTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
+							   //Tweener.Tween(BestTransformWrap, new{ X = BestTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
+							   //Tweener.Tween(NewRecordTransformWrap, new{ X = NewRecordTransformWrap.X + UICanvas.pixelRect.width }, 1f).Ease(Ease.QuadOut);
+
+							   Tweener.Tween(LastTransformWrap, new { X = scoreOnscreenCenter }, 1f).Ease(Ease.QuadOut);
+							   Tweener.Tween(BestTransformWrap, new { X = scoreOnscreenCenter }, 1f).Ease(Ease.QuadOut);
+							   Tweener.Tween(NewRecordTransformWrap, new { X = scoreOnscreenCenter }, 1f).Ease(Ease.QuadOut);
 
 			                   Tweener.Tween(failColorWrap, new{ A = 0 }, 0.5f).OnComplete(() =>
 			                                                                               {
@@ -396,10 +432,16 @@ public class Game : MonoBehaviour
 			                   // Move the camera up and show the main menu
 			                   ClickAnywhere.text = "(tap anywhere to restart)";
 			                   Tweener.Tween(CameraTransformWrap, new{ Y = 1 }, 1f).Ease(Ease.CubeInOut);
-			                   TextTitleTransformWrap.X = -(TitleTextTransform.rect.width + UICanvas.pixelRect.width);
-			                   TextClickAnywhereTransformWrap.X = -(ClickAnywhere.rectTransform.rect.width + UICanvas.pixelRect.width);
-			                   Tweener.Tween(TextTitleTransformWrap, new{ X = UICanvas.pixelRect.width / 2 }, 0.9f).Ease(Ease.QuadOut);
-			                   Tweener.Tween(TextClickAnywhereTransformWrap, new{ X = UICanvas.pixelRect.width / 2 }, 0.6f).Ease(Ease.QuadOut).OnComplete(() => state = State.mainMenu);
+
+							   //TextTitleTransformWrap.X = -(TitleTextTransform.rect.width + UICanvas.pixelRect.width);
+							   //TextClickAnywhereTransformWrap.X = -(ClickAnywhere.rectTransform.rect.width + UICanvas.pixelRect.width);
+							   //Tweener.Tween(TextTitleTransformWrap, new{ X = UICanvas.pixelRect.width / 2 }, 0.9f).Ease(Ease.QuadOut);
+							   //Tweener.Tween(TextClickAnywhereTransformWrap, new{ X = UICanvas.pixelRect.width / 2 }, 0.6f).Ease(Ease.QuadOut).OnComplete(() => state = State.mainMenu);
+
+							   TextTitleTransformWrap.X = titleOffscreenLeft;
+							   TextClickAnywhereTransformWrap.X = clickAnywhereOffscreenLeft;
+							   Tweener.Tween(TextTitleTransformWrap, new { X = titleOnscreenCenter }, 0.9f).Ease(Ease.QuadOut);
+							   Tweener.Tween(TextClickAnywhereTransformWrap, new { X = clickAnywhereOnscreenCenter }, 0.6f).Ease(Ease.QuadOut).OnComplete(() => state = State.mainMenu);
 		                   });
 
 
