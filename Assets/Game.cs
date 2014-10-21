@@ -90,6 +90,10 @@ public class Game : MonoBehaviour
 	private float scoreOffscreenRight;
 	private float scoreOffscreenLeft;
 
+	private float recordOnscreenCenter;
+	private float recordOffscreenRight;
+	private float recordOffscreenLeft;
+
 	void Awake()
 	{
 	//	//audioSkip = AddAudio(clipSkip, false, false, 1.0f);
@@ -131,11 +135,15 @@ public class Game : MonoBehaviour
 		scoreOffscreenRight = LastScore.transform.position.x + UICanvas.pixelRect.xMax;
 		scoreOffscreenLeft = LastScore.transform.position.x - UICanvas.pixelRect.xMax;
 
+		recordOnscreenCenter = NewRecord.transform.position.x;
+		recordOffscreenRight = NewRecord.transform.position.x + UICanvas.pixelRect.xMax;
+		recordOffscreenLeft = NewRecord.transform.position.x - UICanvas.pixelRect.xMax;
+
 		// Move the score off-screen left
 		CurrentScoreText.transform.position = new Vector3(CurrentScoreText.transform.position.x - UICanvas.pixelRect.width, CurrentScoreText.transform.position.y);
-		LastScore.transform.position = new Vector3(LastScore.transform.position.x - UICanvas.pixelRect.width, LastScore.transform.position.y);
-		BestScore.transform.position = new Vector3(BestScore.transform.position.x - UICanvas.pixelRect.width, BestScore.transform.position.y);
-		NewRecord.transform.position = new Vector3(NewRecord.transform.position.x - UICanvas.pixelRect.width, NewRecord.transform.position.y);
+		LastScore.transform.position = new Vector3(scoreOffscreenLeft, LastScore.transform.position.y);
+		BestScore.transform.position = new Vector3(scoreOffscreenLeft, BestScore.transform.position.y);
+		NewRecord.transform.position = new Vector3(recordOffscreenLeft, NewRecord.transform.position.y);
 
 		//-(SnappyAnimator.renderer.bounds.size.x)
 		SnappyTransform.position = new Vector3(camera.ViewportToWorldPoint(new Vector3(-1f, 0)).x, -1);
@@ -233,7 +241,7 @@ public class Game : MonoBehaviour
 
 						Tweener.Tween(LastTransformWrap, new { X = scoreOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { LastTransformWrap.X = scoreOffscreenLeft; });
 						Tweener.Tween(BestTransformWrap, new { X = scoreOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { BestTransformWrap.X = scoreOffscreenLeft; });
-						Tweener.Tween(NewRecordTransformWrap, new { X = scoreOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { NewRecordTransformWrap.X = scoreOffscreenLeft; });
+						Tweener.Tween(NewRecordTransformWrap, new { X = recordOffscreenRight }, 0.6f).Ease(Ease.QuadInOut).OnComplete(() => { NewRecordTransformWrap.X = recordOffscreenLeft; });
 					}
 
 					skipper.renderer.enabled = true;
@@ -421,7 +429,7 @@ public class Game : MonoBehaviour
 
 							   Tweener.Tween(LastTransformWrap, new { X = scoreOnscreenCenter }, 1f).Ease(Ease.QuadOut);
 							   Tweener.Tween(BestTransformWrap, new { X = scoreOnscreenCenter }, 1f).Ease(Ease.QuadOut);
-							   Tweener.Tween(NewRecordTransformWrap, new { X = scoreOnscreenCenter }, 1f).Ease(Ease.QuadOut);
+							   Tweener.Tween(NewRecordTransformWrap, new { X = recordOnscreenCenter }, 1f).Ease(Ease.QuadOut);
 
 			                   Tweener.Tween(failColorWrap, new{ A = 0 }, 0.5f).OnComplete(() =>
 			                                                                               {
